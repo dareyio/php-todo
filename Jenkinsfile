@@ -18,6 +18,14 @@ pipeline {
       }
     }
 
+
+    stage('Establish Pre-requisites') {
+      steps {
+             sh 'mv .env.sample .env'
+      }
+    }
+
+
     stage('Install Dependencies And Run Unit Tests ') {
       steps {
              sh 'composer install && ./vendor/bin/phpunit'
