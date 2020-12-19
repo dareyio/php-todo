@@ -28,7 +28,7 @@ class ExampleTest extends TestCase
     {
         $this->visit('/')->dontSee('Task 1');
 
-        $this->visit('/')
+        $this->visit('')
             ->type('Task 1', 'name')
             ->press('Add Task')
             ->see('Task 1');
