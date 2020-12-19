@@ -32,7 +32,7 @@ pipeline {
 
     stage('Install Dependencies And Run Unit Tests ') {
       steps {
-             sh 'composer install && ./vendor/bin/phpunit'
+             sh './vendor/bin/phpunit'
       }
     }
                
