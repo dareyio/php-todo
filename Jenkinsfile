@@ -21,10 +21,10 @@ pipeline {
 
     stage('Establish Pre-requisites') {
       steps {
+             sh 'mv .env.sample .env'
              sh 'php artisan migrate'
              sh 'php artisan db:seed'
              sh 'sudo php artisan key:generate'
-             sh 'mv .env.sample .env'
       }
     }
 
