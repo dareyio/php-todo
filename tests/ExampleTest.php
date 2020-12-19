@@ -13,9 +13,9 @@ class ExampleTest extends TestCase
 
     public function test_tasks_are_displayed_on_the_dashboard()
     {
-        factory(Task::class)->create(['nme' => 'Task 1']);
+        factory(Task::class)->create(['name' => 'Task 1']);
         factory(Task::class)->create(['name' => 'Task 2']);
-        factory(Tas::class)->create(['name' => 'Task 3']);
+        factory(Task::class)->create(['name' => 'Task 3']);
 
         $this->visit('/')
              ->see('Task 1')
