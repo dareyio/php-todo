@@ -20,9 +20,7 @@ pipeline {
 
     stage('Install Dependencies And Run Unit Tests ') {
       steps {
-             sh '
-                # Install code dependencies and run Unit tests
-                composer install && ./vendor/bin/phpunit'
+             sh 'composer install && ./vendor/bin/phpunit'
       }
     }
                
