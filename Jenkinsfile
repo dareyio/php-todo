@@ -19,7 +19,7 @@ pipeline {
     }
 
 
-    stage('Establish Pre-requisites') {
+    stage('Install Dependencies') {
       steps {
              sh 'mv .env.sample .env'
              sh 'composer install'
@@ -30,12 +30,19 @@ pipeline {
     }
 
 
-    stage('Install Dependencies And Run Unit Tests ') {
+    stage('Unit Tests') {
       steps {
              sh './vendor/bin/phpunit'
       }
     }
                
+    stage('Reports') {
+      steps {
+             sh 'phploc app/ --log-csv build/logs/phploc.csv'
+      }
+    }
+
+
     
 
 // stage ('Starting ART job') {
