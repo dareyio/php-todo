@@ -57,11 +57,42 @@ pipeline {
       }
     }
 
-stage ('Deploy application With Ansible') {
+
+stage ('Deploy to Dev Environment') {
+    //  when { branch pattern: "^feature.*|^dev", comparator: "REGEXP"}
     steps {
-    build job: 'ansible-project/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: true, wait: true
+    build job: 'ansible-project/*', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: true, wait: true
     }
-  }
+//   }
+
+
+// stage ('Deploy to SIT Environment') {
+//        when {
+//                 expression { BRANCH_NAME ==~ /(staging|develop|main)/ }
+//             }
+//     steps {
+//     build job: 'ansible-project/sit', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'sit']], propagate: true, wait: true
+//     }
+//   }
+
+
+// stage ('Deploy to SIT Environment') {
+//      when { branch pattern: "^feature.*|^bug.*|^dev", comparator: "REGEXP"}
+//     steps {
+//     build job: 'ansible-project/sit', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'sit']], propagate: true, wait: true
+//     }
+//   }
+
+
+
+
+
+
+
+
+
+
+
 }
 
     // post {
