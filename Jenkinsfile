@@ -72,7 +72,7 @@ pipeline {
     //   }
     // }
 
-stage {
+stage ('Post')
     post {
             always{
                 sh 'pwd'
@@ -80,7 +80,6 @@ stage {
             }
     }
 
-}
 
 
 
