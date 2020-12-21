@@ -61,7 +61,7 @@ pipeline {
 
 stage ('Deploy Artifact') {
     steps {
-            sh 'sudo zip -qr ${WORKSPACE}/php-todo.zip ${WORKSPACE}/*'
+            sh 'zip -qr ${WORKSPACE}/php-todo.zip ${WORKSPACE}/*'
     }
   
 }
