@@ -61,7 +61,7 @@ pipeline {
 stage ('Deploy to Dev Environment') {
     //  when { branch pattern: "^feature.*|^dev", comparator: "REGEXP"}
     steps {
-    build job: 'ansible-project/*', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: true, wait: true
+    build: 'ansible-project', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: true, wait: true
     }
   }
 
