@@ -63,7 +63,7 @@ stage ('Deploy to Dev Environment') {
     steps {
     build job: 'ansible-project/*', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: true, wait: true
     }
-//   }
+  }
 
 
 // stage ('Deploy to SIT Environment') {
