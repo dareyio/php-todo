@@ -32,16 +32,15 @@ pipeline {
 
     stage('Unit Tests') {
       steps {
-             sh 'mkdir test && mkdir -p reports/coverage'
-             sh 'composer install'
+            //  sh 'mkdir test && mkdir -p reports/coverage'
              sh './vendor/bin/phpunit --log-junit reports/unitreport.xml --coverage-clover reports/coverage/coverage.xml test/'
-            step([
-            $class: 'CloverPublisher',
-            cloverReportDir: 'reports/coverage',
-            cloverReportFileName: 'coverage.xml',
-            healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],
-            unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50],
-            failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]])
+            // step([
+            // $class: 'CloverPublisher',
+            // cloverReportDir: 'reports/coverage',
+            // cloverReportFileName: 'coverage.xml',
+            // healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],
+            // unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50],
+            // failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]])
       }
     }
 
@@ -51,6 +50,7 @@ pipeline {
     stage('Reports') {
       steps {
              sh 'phploc app/ --log-csv build/logs/phploc.csv'
+             xunit thresholds: [failed(failureNewThreshold: '0', failureThreshold: '0', unstableNewThreshold: '0', unstableThreshold: '0'), skipped(failureNewThreshold: '0', failureThreshold: '0', unstableNewThreshold: '0', unstableThreshold: '0')], tools: [PHPUnit(deleteOutputFiles: true, failIfNotNew: true, pattern: 'build/logs/junit.xml', skipNoTestFiles: false, stopProcessingIfError: true)]
       }
     }
 
