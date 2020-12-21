@@ -60,12 +60,9 @@ pipeline {
 
 
 
-
-
-
-// stage ('Starting ART job') {
-//     build job: 'ansible-project', parameters: [[$class: 'StringParameterValue', name: 'systemname', value: systemname]]
-// }
+stage ('Starting ART job') {
+    build job: 'ansible-project', parameters: [[$class: 'StringParameterValue', name: 'systemname', value: systemname]]
+}
     
   }
 
