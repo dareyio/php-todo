@@ -64,7 +64,7 @@ stage ('Deploy Artifact') {
             sh 'sudo zip -qr ${WORKSPACE}/php-todo.zip ${WORKSPACE}/*'
     }
   
-
+}
 
 stage ('Deploy to Dev Environment') {
     steps {
