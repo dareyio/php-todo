@@ -59,7 +59,8 @@ pipeline {
 
 stage ('Deploy application With Ansible') {
     steps {
-    build job: 'ansible-project', parameters: [[$class: 'StringParameterValue', name: 'env', value: dev]]
+    // build job: 'ansible-project', parameters: [[$class: 'StringParameterValue', name: 'env', value: dev]]
+    build job: 'ansible-project', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']]
     }
   }
 }
