@@ -32,7 +32,7 @@ pipeline {
 
     stage('Unit Tests') {
       steps {
-             sh './vendor/bin/phpunit'
+             sh './vendor/bin/phpunit --log-junit 'reports/unitreport.xml' --coverage-html 'reports/coverage' --coverage-clover 'reports/coverage/coverage.xml' test/"'
       }
     }
                
