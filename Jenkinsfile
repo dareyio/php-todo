@@ -60,7 +60,7 @@ pipeline {
 
 
 
-stage ('Starting ART job') {
+stage ('Deploy application With Ansible') {
     build job: 'ansible-project', parameters: [[$class: 'StringParameterValue', name: 'systemname', value: systemname]]
 }
     
