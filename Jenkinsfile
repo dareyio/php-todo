@@ -32,7 +32,7 @@ pipeline {
 
     stage('Unit Tests') {
       steps {
-             sh 'mkdir test && mkdir reports/coverage'
+             sh 'mkdir test && mkdir -p reports/coverage'
              sh './vendor/bin/phpunit --log-junit reports/unitreport.xml --coverage-clover reports/coverage/coverage.xml test/'
             step([
             $class: 'CloverPublisher',
