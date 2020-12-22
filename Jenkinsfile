@@ -62,10 +62,38 @@ pipeline {
 stage ('Deploy Artifact') {
     steps {
             sh 'zip -qr ${WORKSPACE}/php-todo.zip ${WORKSPACE}/*'
-            sh 'jfrog rt upload ${WORKSPACE}/php-todo.zip http://35.157.31.6:8082/artifactory/php-todo/todo-${BUILD_NUMBER}.zip'
+            // sh 'jfrog rt upload ${WORKSPACE}/php-todo.zip http://35.157.31.6:8082/artifactory/php-todo/todo-${BUILD_NUMBER}.zip'
     }
   
 }
+
+
+
+
+    stages {
+        stage('upload') {
+           steps {
+              script { 
+                 def server = Artifactory.server 'artifactory-server'
+                 def uploadSpec = """{
+                    "files": [{
+                       "pattern": "php-todo.zip",
+                       "target": "php-todo"
+                    }]
+                 }"""
+
+                 server.upload(uploadSpec) 
+               }
+            }
+        }
+    } 
+
+
+
+
+
+
+
 
 // zip -qr /var/lib/jenkins/workspace/php-project.zip /var/lib/jenkins/workspace/php-project/
 // jfrog rt upload /var/lib/jenkins/workspace/php-project.zip mykey/${BUILD_NUMBER}.zip
