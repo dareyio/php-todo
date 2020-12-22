@@ -62,9 +62,22 @@ pipeline {
 stage ('Deploy Artifact') {
     steps {
             sh 'zip -qr ${WORKSPACE}/php-todo.zip ${WORKSPACE}/*'
+            sh 'jfrog rt upload ${WORKSPACE}/php-todo.zip http://35.157.31.6:8082/artifactory/php-todo/todo-${BUILD_NUMBER}.zip'
     }
   
 }
+
+// zip -qr /var/lib/jenkins/workspace/php-project.zip /var/lib/jenkins/workspace/php-project/
+// jfrog rt upload /var/lib/jenkins/workspace/php-project.zip mykey/${BUILD_NUMBER}.zip
+// rm /var/lib/jenkins/workspace/php-project.zip
+// #ssh root@18.193.53.21  "su -s /bin/bash -c 'cd /var/www/html && git pull' www-data"
+// jfrog rt download "mykey/${BUILD_NUMBER}.zip" /var/tmp/todeploy.zip
+// cd /var/tmp
+// rm -rf /var/tmp/var
+// unzip -q todeploy.zip
+// cd /var/tmp/var/lib/jenkins/workspace/php-project
+// rsync  .  root@18.193.53.21:/var/www/html --chown=www-data:www-data -alz --delete --delete-excluded --exclude-from=ExcludeFiles
+// rm -rf /var/tmp/var
 
 stage ('Deploy to Dev Environment') {
     steps {
