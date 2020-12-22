@@ -68,10 +68,7 @@ stage ('Deploy Artifact') {
 }
 
 
-
-
-    stages {
-        stage('upload') {
+ stage('upload') {
            steps {
               script { 
                  def server = Artifactory.server 'artifactory-server'
@@ -86,7 +83,7 @@ stage ('Deploy Artifact') {
                }
             }
         }
-    } 
+
 
 
 
