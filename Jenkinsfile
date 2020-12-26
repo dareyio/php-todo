@@ -56,7 +56,7 @@ pipeline {
       }
     }
 
-    stage('Sonarqube') {
+    stage('Sonarqube And Quality Gate Analysis') {
         environment {
             scannerHome = tool 'SonarQubeScanner'
         }
@@ -64,9 +64,15 @@ pipeline {
             withSonarQubeEnv('sonarqube') {
                 sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
             }
-            timeout(time: 10, unit: 'MINUTES') {
-                waitForQualityGate abortPipeline: true
-            }
+            // timeout(time: 10, unit: 'MINUTES') {
+            //     waitForQualityGate abortPipeline: true
+            // }
+        timeout(time: 10, unit: 'MINUTES') { // Just in case something goes wrong, pipeline will be killed after a timeout
+          def wait_timeout = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+          if (wait_timeout.status != 'OK') {
+            error "Pipeline aborted due to quality gate failure: ${wait_timeout.status}"
+          }
+        }
         }
     }
 
