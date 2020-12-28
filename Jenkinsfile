@@ -56,7 +56,10 @@ pipeline {
       }
     }
 
+
+
     stage('SonarQube Quality Gate') {
+      when { branch pattern: "^feature.*|^bug.*|^dev", comparator: "REGEXP"}
         environment {
             scannerHome = tool 'SonarQubeScanner'
         }
@@ -64,13 +67,28 @@ pipeline {
             withSonarQubeEnv('sonarqube') {
                 sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
             }
-            // timeout(time: 60, unit: 'MINUTES') {
-            //     waitForQualityGate abortPipeline: true
-            // }
-
         }
     }
   
+      stage('SonarQube Quality Gate') {
+               when {
+                expression { BRANCH_NAME ==~ /(develop)/ }
+            }
+        environment {
+            scannerHome = tool 'SonarQubeScanner'
+        }
+        steps {
+            withSonarQubeEnv('sonarqube') {
+                sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
+            }
+            timeout(time: 1, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+            }
+
+        }
+    }
+
+
 
 stage ('Deploy Artifact') {
     steps {
