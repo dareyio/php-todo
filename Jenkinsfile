@@ -63,18 +63,21 @@
             sh 'zip -qr ${WORKSPACE}/php-todo.zip ${WORKSPACE}/*'
            } 
         }
-        stage ('Deploy Artifact') {
+        stage ('Upload Artifact to Artifactory') {
           steps {
             script { 
                  def server = Artifactory.server 'Jfrog'
                  def uploadSpec = """{
-                    "files": [{
+                    "files": [
+                      {
                        "pattern": "php-todo.zip",
-                       "target": "php-todo"
-                    }]
+                       "target": "David/php-todo"
+                       "props": "type=zip;status=ready"
+                      }
+                    ]
                  }""" 
 
-                 server.upload(uploadSpec) 
+                 server.upload spec: uploadSpec
                }
             }
   
