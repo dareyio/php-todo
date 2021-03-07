@@ -71,7 +71,7 @@
                     "files": [
                       {
                        "pattern": "/home/ansadmin/workfolder/php-todo/php-todo.zip",
-                       "target": "David/php-todo"
+                       "target": "David/php-todo",
                        "props": "type=zip;status=ready"
 
                        }
