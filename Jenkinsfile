@@ -67,6 +67,8 @@
           steps {
             script { 
                  def server = Artifactory.server 'Jfrog'
+                 def repoDir = "http://18.184.166.204:8082/artifactory/David/"
+                 
                  def uploadSpec = """{
                     "files": [
                       {
@@ -77,7 +79,7 @@
                     ]
                  }""" 
 
-                 server.upload spec: uploadSpec
+                 server.uploadspec: uploadSpec
                }
             }
   
