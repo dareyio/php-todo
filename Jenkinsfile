@@ -66,20 +66,19 @@
         stage ('Upload Artifact to Artifactory') {
           steps {
             script { 
-                 def server = Artifactory.server 'Jfrog'
-                 def repoDir = "http://18.184.166.204:8082/artifactory/David/"
-                 
+                 def server = Artifactory.server 'Jfrog'                 
                  def uploadSpec = """{
                     "files": [
                       {
-                       "pattern": "php-todo.zip",
+                       "pattern": "/home/ansadmin/workfolder/php-todo/php-todo.zip",
                        "target": "David/php-todo"
                        "props": "type=zip;status=ready"
-                      }
+
+                       }
                     ]
                  }""" 
 
-                 server.uploadspec: uploadSpec
+                 server.upload spec: uploadSpec
                }
             }
   
