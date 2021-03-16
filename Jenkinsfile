@@ -1,9 +1,7 @@
  pipeline {
     agent any
 
-
   stages {
-
      stage("Initial cleanup") {
        steps {
             dir("${WORKSPACE}") {
@@ -83,14 +81,16 @@
             }
   
         }
-        stage('publish build info')
+        stage('publish build info'){
           steps{
             script{
               def buildInfo1 = server.upload uploadSpec
               server.publishBuildInfo buildInfo1
-
             }
           }
+
+        }
+          
         
    }
 
