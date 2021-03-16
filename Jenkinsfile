@@ -70,7 +70,7 @@
                  def uploadSpec = """{
                     "files": [
                       {
-                       "pattern": "/home/ansadmin/workfolder/php-todo/php-todo.zip",
+                       "pattern": /var/lib/jenkins/workspace/php-todo_main/php-todo.zip",
                        "target": "David/php-todo",
                        "props": "type=zip;status=ready"
 
@@ -83,6 +83,14 @@
             }
   
         }
+        stage('publish build info')
+          steps{
+            script{
+              def buildInfo1 = server.upload uploadSpec
+              server.publishBuildInfo buildInfo1
+
+            }
+          }
         
    }
 
