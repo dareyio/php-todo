@@ -60,6 +60,20 @@ pipeline {
                 sh 'zip -qr ${WORKSPACE}/php-todo.zip ${WORKSPACE}/*'
             }
         }
+        stage('SonarQube Quality Gate') {
+            when { branch pattern: "^develop*|^hotfix*|^release*|^main*", comparator: "REGEXP"}
+            environment {
+                scannerHome = tool 'SonarQubeScanner'
+            }
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
+                }
+                timeout(time: 1, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+                }
+            }
+        }
         stage ('Deploy Artifact') {
             steps {
                 script { 
@@ -78,20 +92,6 @@ pipeline {
         stage ('Deploy to Dev Environment') {
             steps {
                 build job: 'ansible-config-mgt/dev', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
-            }
-        }
-        stage('SonarQube Quality Gate') {
-            when { branch pattern: "^develop*|^hotfix*|^release*|^main*", comparator: "REGEXP"}
-            environment {
-                scannerHome = tool 'SonarQubeScanner'
-            }
-            steps {
-                withSonarQubeEnv('sonarqube') {
-                sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
-                }
-                timeout(time: 1, unit: 'MINUTES') {
-                waitForQualityGate abortPipeline: true
-                }
             }
         }
     }
