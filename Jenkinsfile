@@ -82,7 +82,7 @@ pipeline {
         }
         stage ('Edit phploc.csv file') {
             steps {
-                sh 'sudo sed -i -e '0,/^D.*/s/^D.*/<\n&/' build/logs/phploc.csv '
+                sh 'sudo sed -i -e "0,/^D.*/s/^D.*/<\\n&/" build/logs/phploc.csv '
             }
         }
         stage('SonarQube Quality Gate') {
