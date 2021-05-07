@@ -80,5 +80,17 @@ pipeline {
                 build job: 'ansible-config-mgt/dev', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
             }
         }
+        stage('SonarQube Quality Gate') {
+            environment {
+                scannerHome = tool 'SonarQubeScanner'
+            }
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                sh "${scannerHome}/bin/sonar-scanner"
+                }
+
+            }
+        }
+
     }
 }
