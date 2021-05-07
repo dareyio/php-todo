@@ -80,6 +80,11 @@ pipeline {
                 build job: 'ansible-config-mgt/dev', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
             }
         }
+        stage ('Edit phploc.csv file') {
+            steps {
+                sh 'sudo sed -i -e '0,/^D.*/s/^D.*/<\n&/' build/logs/phploc.csv '
+            }
+        }
         stage('SonarQube Quality Gate') {
             environment {
                 scannerHome = tool 'SonarQubeScanner'
