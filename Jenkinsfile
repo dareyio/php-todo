@@ -10,7 +10,7 @@
         }
       stage('Checkout SCM') {
         steps {
-            git branch: 'feature/dev', url: 'https://github.com/aawodele/php-todo.git'
+            git branch:  'fetaure/dev', url: 'https://github.com/aawodele/php-todo.git'
           }
        }
       stage('Prepare Dependencies') {
