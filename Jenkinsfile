@@ -59,7 +59,7 @@
                  def uploadSpec = """{
                     "files": [
                       {
-                       "pattern": "/var/lib/jenkins/workspace/php-todo_main/php-todo.zip",
+                       "pattern": "/var/lib/jenkins/workspace/php-todo_fetaure_dev/php-todo.zip",
                        "target": "todo-app/php-todo",
                        "props": "type=zip;status=ready"
                        }
