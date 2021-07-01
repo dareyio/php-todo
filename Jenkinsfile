@@ -49,7 +49,7 @@
       }
       stage ('Package Artifact') {
         steps {
-            sh 'zip -qr ${WORKSPACE}/php-todo.zip ${WORKSPACE}/*'
+            sh 'sudo zip -qr ${WORKSPACE}/php-todo.zip ${WORKSPACE}/*'
            }
         }
         stage ('Upload Artifact to Artifactory') {
@@ -59,7 +59,7 @@
                  def uploadSpec = """{
                     "files": [
                       {
-                       "pattern": "/var/lib/jenkins/workspace/php-todo_fetaure_dev/php-todo.zip",
+                       "pattern": "${WORKSPACE}/php-todo.zip",
                        "target": "todo-app/php-todo",
                        "props": "type=zip;status=ready"
                        }
