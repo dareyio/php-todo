@@ -1,20 +1,29 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Build') {
+  stages {
+
+        stage("Initial cleanup") {
             steps {
-                script {
-                    sh 'echo "Building Stage"'
+                dir("${WORKSPACE}") {
+                    deleteDir()
                 }
             }
         }
 
-        stage('Test') {
+        stage('Checkout SCM') {
             steps {
-                script {
-                    sh 'echo "Testing Stage"'
-                }
+                git branch: 'main', url: 'https://github.com/darey-devops/php-todo.git'
+            }
+        }
+
+        stage('Prepare Dependencies') {
+            steps {
+                sh 'mv .env.sample .env'
+                sh 'composer install'
+                sh 'php artisan migrate'
+                sh 'php artisan db:seed'
+                sh 'php artisan key:generate'
             }
         }
     }
