@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-  stages {
+    stages {
 
         stage("Initial cleanup") {
             steps {
@@ -30,6 +30,11 @@ pipeline {
             steps {
                 sh './vendor/bin/phpunit'
              } 
-        }     
-    }
+        }
+        stage('Code Analysis') {
+            steps {
+                sh 'phploc app/ --log-csv build/logs/phploc.csv'
+            }
+        }
+    }    
 }
