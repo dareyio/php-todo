@@ -52,6 +52,21 @@ pipeline {
                 plot csvFileName: 'plot-396c4a6b-b573-41e5-85d8-73613b2ffffb.csv', csvSeries: [[displayTableFlag: false, exclusionValues: 'Interfaces,Traits,Classes,Methods,Functions,Constants', file: 'build/logs/phploc.csv', inclusionFlag: 'INCLUDE_BY_STRING', url: '']], group: 'phploc', numBuilds: '100', style: 'line', title: 'BB - Structure Objects', yaxis: 'Count'
             }
         }
+
+        stage('SonarQube Quality Gate') {
+            when { branch pattern: "^develop*|^hotfix*|^release*|^main*", comparator: "REGEXP"}
+                environment {
+                    scannerHome = tool 'SonarQubeScanner'
+                }
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
+                }
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }    
+            }
+        }
         stage ('Package Artifact') {
             steps {
                 sh 'zip -qr ${WORKSPACE}/php-todo.zip ${WORKSPACE}/*'
@@ -87,7 +102,7 @@ pipeline {
                 }    
             }
         }
-       
+     
         stage ('Deploy to Dev Environment') {
             steps {
                 build job: 'ansible-config-mgt/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
