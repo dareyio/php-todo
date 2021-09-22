@@ -82,5 +82,11 @@ stage('Plot Code Coverage Report') {
             }
   
         }
+
+  stage ('Deploy to Dev Environment') {
+    steps {
+    build job: 'ansible-config/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
+    }
+  }
 }
 }
