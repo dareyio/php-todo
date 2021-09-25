@@ -72,7 +72,7 @@ stage('Plot Code Coverage Report') {
         }
     }
   
-    stage ('Package Artifact') {
+    stage ('Package Artifact') 
     steps {
             sh 'zip -qr php-todo.zip ${WORKSPACE}/*'
      }
