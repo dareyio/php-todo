@@ -56,5 +56,37 @@ pipeline {
 
       }
     }
+
+    stage ('Package Artifact') {
+      steps {
+            sh 'zip -qr php-todo.zip ${WORKSPACE}/*'
+      }
+    }
+
+    stage ('Upload Artifact to Artifactory') {
+      steps {
+        script { 
+              def server = Artifactory.server 'artifactory-server'                 
+              def uploadSpec = """{
+                "files": [
+                  {
+                    "pattern": "php-todo.zip",
+                    "target": "<name-of-artifact-repository>/php-todo",
+                    "props": "type=zip;status=ready"
+
+                    }
+                ]
+              }""" 
+
+              server.upload spec: uploadSpec
+        }
+      }
+    }
+
+    stage ('Deploy to Dev Environment') {
+      steps {
+        build job: 'ansible-project/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
+      }
+    }
   }
 }
