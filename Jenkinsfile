@@ -32,4 +32,5 @@ pipeline {
              sh './vendor/bin/phpunit'
       } 
   }
+ }
 }
