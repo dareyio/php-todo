@@ -57,5 +57,36 @@ pipeline {
                 plot csvFileName: 'plot-396c4a6b-b573-41e5-85d8-73613b2ffffb.csv', csvSeries: [[displayTableFlag: false, exclusionValues: 'Interfaces,Traits,Classes,Methods,Functions,Constants', file: 'build/logs/phploc.csv', inclusionFlag: 'INCLUDE_BY_STRING', url: '']], group: 'phploc', numBuilds: '100', style: 'line', title: 'BB - Structure Objects', yaxis: 'Count'
             }
         }
-    }
+
+        stage ('Package Artifact') {
+            steps {
+                sh 'zip -qr ${WORKSPACE}/php-todo.zip ${WORKSPACE}/*'
+            }
+        }
+
+        stage ('Upload Artifact to Artifactory') {
+            steps {
+                script { 
+                    def server = Artifactory.server 'artifactory-server'                 
+                    def uploadSpec = """{
+                      "files": [
+                        {
+                          "pattern": "php-todo.zip",
+                          "target": "PBL/php-todo",
+                          "props": "type=zip;status=ready"
+                        }
+                      ]
+                  }""" 
+                  server.upload spec: uploadSpec
+                }
+            } 
+        }
+
+        stage ('Deploy to Dev Environment') {
+            steps {
+                build job: 'ansible-config-mgt/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
+            }
+        }
+
+    }    
 }
