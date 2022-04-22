@@ -79,7 +79,7 @@ pipeline {
             }
         }
 
-        stage ('Upload Artifact to Artifactory') {
+        stage ('Upload Artifact to Jfrog Artifactory') {
             steps {
                 script { 
                     def server = Artifactory.server 'artifactory-server'                 
