@@ -1,0 +1,11 @@
+[2022-06-20 05:31:42.105] [exthost] [info] Extension host with pid 2335 started
+[2022-06-20 05:31:42.119] [exthost] [info] Lock '/home/ubuntu/.vscode-server/data/User/workspaceStorage/b6f8f3a17aa7916bce26c3895501547f/vscode.lock': Lock acquired.
+[2022-06-20 05:31:42.533] [exthost] [info] ExtensionService#_doActivateExtension vscode.debug-auto-launch, startup: true, activationEvent: '*'
+[2022-06-20 05:31:42.549] [exthost] [info] ExtensionService#_doActivateExtension vscode.git-base, startup: true, activationEvent: '*'
+[2022-06-20 05:31:42.561] [exthost] [info] ExtensionService#_doActivateExtension vscode.ipynb, startup: true, activationEvent: '*'
+[2022-06-20 05:31:43.059] [exthost] [info] ExtensionService#_doActivateExtension vscode.github, startup: true, activationEvent: '*'
+[2022-06-20 05:31:43.502] [exthost] [info] ExtensionService#_doActivateExtension vscode.git, startup: false, activationEvent: '*'
+[2022-06-20 05:31:43.588] [exthost] [info] ExtensionService#_doActivateExtension vscode.emmet, startup: false, activationEvent: 'onStartupFinished'
+[2022-06-20 05:31:43.606] [exthost] [info] ExtensionService#_doActivateExtension vscode.merge-conflict, startup: false, activationEvent: 'onStartupFinished'
+[2022-06-20 05:31:43.611] [exthost] [info] Eager extensions activated
+[2022-06-20 05:40:49.928] [exthost] [info] ExtensionService#_doActivateExtension vscode.php-language-features, startup: false, activationEvent: 'onLanguage:php'

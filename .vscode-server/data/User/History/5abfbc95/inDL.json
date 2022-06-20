@@ -1,0 +1,11 @@
+{
+    "remote.SSH.remotePlatform": {
+        "ansible": "linux",
+        "Jenkins": "linux",
+        "terraform": "linux",
+        "bastion": "linux",
+        "Docker": "linux"
+    },
+    "bracket-pair-colorizer-2.depreciation-notice": false,
+    "window.zoomLevel": -1
+}
