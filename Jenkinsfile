@@ -13,7 +13,7 @@ pipeline {
 
     stage('Checkout SCM') {
       steps {
-         heckout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: '6a902a53-bed3-484f-973b-4d4f06fe3101', url: 'https://github.com/Timmyzooto01/php-todo.git']]])
+          git branch: 'main', url: 'https://github.com/Timmyzooto01/php-todo.git'
       }
     }
 
