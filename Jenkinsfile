@@ -55,7 +55,7 @@ stage('Plot Code Coverage Report') {
       }
     }
     stage('SonarQube Quality Gate') {
-      when { branch pattern: "^develop*|^hotfix*|^release*|^timi*", comparator: "REGEXP"}
+      when { branch pattern: "^develop*|^hotfix*|^release*|^main*", comparator: "REGEXP"}
         environment {
             scannerHome = tool 'SonarQubeScanner'
         }
