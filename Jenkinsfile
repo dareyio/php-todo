@@ -1,25 +1,23 @@
 pipeline {
     agent any
 
-
   stages {
 
-     stage("Initial cleanup") {
+    stage("Initial cleanup") {
           steps {
             dir("${WORKSPACE}") {
               deleteDir()
             }
           }
         }
-  
+
     stage('Checkout SCM') {
       steps {
-            git branch: 'main', url: 'https://github.com/darey-devops/php-todo.git'
+            git branch: 'main', url: 'https://github.com/mexez/php-todo.git'
       }
     }
 
-
-    stage('Install Dependencies') {
+    stage('Prepare Dependencies') {
       steps {
              sh 'mv .env.sample .env'
              sh 'composer install'
@@ -28,17 +26,15 @@ pipeline {
              sh 'php artisan key:generate'
       }
     }
-
     stage('Execute Unit Tests') {
       steps {
-             sh './vendor/bin/phpunit --log-junit reports/unitreport.xml'
-      }
-    }
+             sh './vendor/bin/phpunit'
+      } 
 
-
-    stage('Publish & Plot Code Coverage Report') {
+  }
+    
+    stage('Plot Code Coverage Report') {
       steps {
-            sh 'phploc app/ --log-csv build/logs/phploc.csv'
 
             plot csvFileName: 'plot-396c4a6b-b573-41e5-85d8-73613b2ffffb.csv', csvSeries: [[displayTableFlag: false, exclusionValues: 'Lines of Code (LOC),Comment Lines of Code (CLOC),Non-Comment Lines of Code (NCLOC),Logical Lines of Code (LLOC)                          ', file: 'build/logs/phploc.csv', inclusionFlag: 'INCLUDE_BY_STRING', url: '']], group: 'phploc', numBuilds: '100', style: 'line', title: 'A - Lines of code', yaxis: 'Lines of Code'
             plot csvFileName: 'plot-396c4a6b-b573-41e5-85d8-73613b2ffffb.csv', csvSeries: [[displayTableFlag: false, exclusionValues: 'Directories,Files,Namespaces', file: 'build/logs/phploc.csv', inclusionFlag: 'INCLUDE_BY_STRING', url: '']], group: 'phploc', numBuilds: '100', style: 'line', title: 'B - Structures Containers', yaxis: 'Count'
@@ -51,12 +47,8 @@ pipeline {
             plot csvFileName: 'plot-396c4a6b-b573-41e5-85d8-73613b2ffffb.csv', csvSeries: [[displayTableFlag: false, exclusionValues: 'Logical Lines of Code (LLOC),Classes Length (LLOC),Functions Length (LLOC),LLOC outside functions or classes ', file: 'build/logs/phploc.csv', inclusionFlag: 'INCLUDE_BY_STRING', url: '']], group: 'phploc', numBuilds: '100', style: 'line', title: 'AB - Code Structure by Logical Lines of Code', yaxis: 'Logical Lines of Code'
             plot csvFileName: 'plot-396c4a6b-b573-41e5-85d8-73613b2ffffb.csv', csvSeries: [[displayTableFlag: false, exclusionValues: 'Functions,Named Functions,Anonymous Functions', file: 'build/logs/phploc.csv', inclusionFlag: 'INCLUDE_BY_STRING', url: '']], group: 'phploc', numBuilds: '100', style: 'line', title: 'H - Types of Functions', yaxis: 'Count'
             plot csvFileName: 'plot-396c4a6b-b573-41e5-85d8-73613b2ffffb.csv', csvSeries: [[displayTableFlag: false, exclusionValues: 'Interfaces,Traits,Classes,Methods,Functions,Constants', file: 'build/logs/phploc.csv', inclusionFlag: 'INCLUDE_BY_STRING', url: '']], group: 'phploc', numBuilds: '100', style: 'line', title: 'BB - Structure Objects', yaxis: 'Count'
-
-
-      }
-    }
-
-
+      } 
+    } 
 
     stage('SonarQube Quality Gate') {
       when { branch pattern: "^develop*|^hotfix*|^release*|^main*", comparator: "REGEXP"}
@@ -67,47 +59,44 @@ pipeline {
             withSonarQubeEnv('sonarqube') {
                 sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
             }
-            timeout(time: 1, unit: 'MINUTES') {
+            timeout(time: 7, unit: 'MINUTES') {
                 waitForQualityGate abortPipeline: true
             }
         }
     }
-  
 
-stage ('Deploy Artifact') {
-    steps {
-            sh 'zip -qr ${WORKSPACE}/php-todo.zip ${WORKSPACE}/*'
+    stage ('Package Artifact') {
+       steps {
+            sh 'zip -qr php-todo.zip ${WORKSPACE}/*'
+     }
+    }
+
+    stage ('Upload Artifact to Artifactory') {
+          steps {
             script { 
-                 def server = Artifactory.server 'artifactory-server'
+                 def server = Artifactory.server 'artifactory-server'                 
                  def uploadSpec = """{
-                    "files": [{
+                    "files": [
+                      {
                        "pattern": "php-todo.zip",
-                       "target": "php-todo"
-                    }]
-                 }"""
+                       "target": "AEON/php-todo",
+                       "props": "type=zip;status=ready"
 
-                 server.upload(uploadSpec) 
+                       }
+                    ]
+                 }""" 
+
+                 server.upload spec: uploadSpec
                }
-            // sh 'jfrog rt upload ${WORKSPACE}/php-todo.zip http://35.157.31.6:8082/artifactory/php-todo/todo-${BUILD_NUMBER}.zip'
+            }
+
+        }
+
+    stage ('Deploy to Dev Environment') {
+      steps {
+      build job: 'P14_CI-with-Jenkins-Ansible-Artifactory-Sonarqube-PHP/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
     }
-  
-}
-
-
-stage ('Deploy to Dev Environment') {
-    steps {
-    build job: 'ansible-project/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
-    }
-  }
-
+  }    
 
 }
-
-    // post {
-    //         always {
-    //             echo 'Clean up'
-    //             //  xunit thresholds: [failed(failureNewThreshold: '0', failureThreshold: '0', unstableNewThreshold: '0', unstableThreshold: '0'), skipped(failureNewThreshold: '0', failureThreshold: '0', unstableNewThreshold: '0', unstableThreshold: '0')], tools: [PHPUnit(deleteOutputFiles: true, failIfNotNew: true, pattern: 'build/logs/junit.xml', skipNoTestFiles: false, stopProcessingIfError: true)]
-    //         }
-    // }
-
-}
+}         
