@@ -13,12 +13,13 @@ pipeline {
 
     stage('Checkout SCM') {
       steps {
-            git branch: 'main', url: 'https://github.com/earchibong/ansible-config-mgt.git'
+            git branch: 'main', url: 'https://github.com/earchibong/php-todo.git'
       }
     }
 
     stage('Prepare Dependencies') {
       steps {
+             sh 'mv .env.sample .env'
              sh 'composer install'
              sh 'php artisan migrate'
              sh 'php artisan db:seed'
