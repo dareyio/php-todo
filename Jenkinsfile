@@ -85,7 +85,7 @@ pipeline {
 
         }
 
-        tage('SonarQube Quality Gate') {
+        stage('SonarQube Quality Gate') {
           environment {
             scannerHome = tool 'SonarQubeScanner'
         }
