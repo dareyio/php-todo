@@ -59,33 +59,31 @@ pipeline {
     }
 
 
+    stage ('Upload Artifact to Artifactory') {
+        steps {
+            script { 
+                 def server = Artifactory.server 'artifactory-server'                 
+                 def uploadSpec = """{
+                    "files": [
+                      {
+                       "pattern": "php-todo.zip",
+                       "target": "pro14-dev-local/php-todo",
+                       "props": "type=zip;status=ready"
 
+                       }
+                    ]
+                 }""" 
 
-    // stage ('Upload Artifact to Artifactory') {
-    //     steps {
-    //         script { 
-    //              def server = Artifactory.server 'artifactory-server'                 
-    //              def uploadSpec = """{
-    //                 "files": [
-    //                   {
-    //                    "pattern": "php-todo.zip",
-    //                    "target": "pro14-dev-local/php-todo",
-    //                    "props": "type=zip;status=ready"
+                 server.upload spec: uploadSpec
+               }
+            }
 
-    //                    }
-    //                 ]
-    //              }""" 
+        }
 
-    //              server.upload spec: uploadSpec
-    //            }
-    //         }
-
-    //     }
-
-  //   stage ('Deploy to Dev Environment') {
-  //     steps {
-  //       build job: 'ansible-configuration/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev.yml']], propagate: false, wait: true
-  //   }
-  // }
+    stage ('Deploy to Dev Environment') {
+      steps {
+        build job: 'ansible-configuration/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev.yml']], propagate: false, wait: true
+    }
+  }
   }
 }
