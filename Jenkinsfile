@@ -65,5 +65,26 @@ pipeline {
     }
    
 
+    stage ('Upload Artifact to Artifactory') {
+      steps {
+            script { 
+                def server = Artifactory.server 'artifactory-server'                 
+                def uploadSpec = """{
+                   "files": [
+                     {
+                      "pattern": "php-todo.zip",
+                      "target": "PBL/php-todo",
+                      "props": "type=zip;status=ready"
+
+                      }
+                   ]
+                }""" 
+
+                server.upload spec: uploadSpec
+            }
+      }
+
+    }    
+
   }
 }
