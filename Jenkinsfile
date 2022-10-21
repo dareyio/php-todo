@@ -1,16 +1,15 @@
-
 pipeline {
     agent any
 
   stages {
 
-     stage("Initial cleanup") {
-          steps {
+    stage("Initial cleanup") {
+      steps {
             dir("${WORKSPACE}") {
               deleteDir()
             }
-          }
-        }
+      }
+    }
 
     stage('Checkout SCM') {
       steps {
@@ -27,5 +26,12 @@ pipeline {
              sh 'php artisan key:generate'
       }
     }
+
+    stage('Execute Unit Tests') {
+      steps {
+             sh './vendor/bin/phpunit'
+      } 
+    }
+
   }
 }
