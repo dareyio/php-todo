@@ -88,4 +88,4 @@ stage('Plot Code Coverage Report') {
     build job: 'NEW-ANSIBLE/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
     }
   }
-}
+ }
