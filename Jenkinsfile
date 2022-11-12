@@ -82,5 +82,10 @@ stage('Plot Code Coverage Report') {
             }
 
         }
- }
+ 
+  stage ('Deploy to Dev Environment') {
+    steps {
+    build job: 'NEW-ANSIBLE/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
+    }
+  }
 }
