@@ -60,11 +60,11 @@ stage('Plot Code Coverage Report') {
     
 stage('SonarQube Quality Gate') {
     environment {
-            scannerHome = tool 'SonarQubeScanner'
+            scannerHome = tool 'sonar'
         }
     steps {
-            withSonarQubeEnv('sonarqube') {
-                sh "${scannerHome}/bin/sonar-scanner"
+            withSonarQubeEnv() {
+                sh "${scannerHome}/bin/sonar-scanner --version"
             }
 
         }
