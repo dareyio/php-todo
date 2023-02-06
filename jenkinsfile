@@ -30,7 +30,9 @@ pipeline {
     
     stage('Checkout SCM'){
       steps {
-        script {checkout scmGit(branches: [[name: '*/jenkins-ecr']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/earchibong/php-todo.git']])}
+        script {
+            checkout scmGit(branches: [[name: '**']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/earchibong/php-todo.git']])
+        }
       }
     }
 
