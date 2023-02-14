@@ -13,7 +13,7 @@ pipeline {
 
     stage('Checkout SCM') {
       steps {
-            git branch: 'feature/jenkinspipeline-stages', url: 'https://github.com/teaguejobs/php-todo.git'
+            git branch: 'main', url: 'https://github.com/teaguejobs/php-todo.git'
       }
     }
 
