@@ -1,26 +1,20 @@
-FROM php:7.4.30-cli
+FROM php:7.4 as php
 
-USER root
-WORKDIR  /var/www/html
+RUN apt-get update -y
+RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev
+RUN docker-php-ext-install pdo pdo_mysql bcmath
 
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    zlib1g-dev \
-    libxml2-dev \
-    libzip-dev \
-    libonig-dev \
-    zip \
-    curl \
-    unzip \
-    && docker-php-ext-configure gd \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install pdo_mysql \
-    && docker-php-ext-install mysqli \
-    && docker-php-ext-install zip \
-    && docker-php-source delete
+RUN pecl install -o -f redis \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable redis
 
+# WORKDIR /var/www
+# COPY . .
+COPY --from=composer:2.3.5 /usr/bin/composer /usr/bin/composer
+
+ENV PORT=8000
+
+WORKDIR /var/www
 COPY . .
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-ENTRYPOINT [  "bash", "start-apache.sh" ]
+RUN chmod +x /var/www/entrypoint.sh
+ENTRYPOINT [ "/var/www/entrypoint.sh" ]
