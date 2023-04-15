@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Build image for php-todo-app') {
       steps {
-        sh 'docker build -t stlng/php-todo-master:0.0.1 .'
+        sh 'docker build -t stlng/php-todo-features:0.0.1 .'
       }
     }
     stage('Login to docker hub') {
@@ -19,7 +19,7 @@ pipeline {
     }
     stage('Push docker image to docker hub registry') {
       steps {
-        sh 'docker push stlng/php-todo-master:0.0.1'
+        sh 'docker push stlng/php-todo-features:0.0.1'
       }
     }
   }
