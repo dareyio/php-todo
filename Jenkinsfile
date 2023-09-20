@@ -58,15 +58,14 @@ pipeline {
 
      stage('SonarQube Quality Gate') {
       environment {
-        scannerHome = tool 'SonarQubeScanner'
+          scannerHome = tool 'SonarQubeScanner'
       }
-        steps {
-            withSonarQubeEnv('sonarqube') {
-                sh "${scannerHome}/bin/sonar-scanner"
-              }
-
+      steps {
+          withSonarQubeEnv('sonarqube') {
+              sh "${scannerHome}/bin/sonar-scanner"
           }
       }
+}
 
     stage ('Package Artifact') {
       steps {
