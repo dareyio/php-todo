@@ -60,10 +60,11 @@ pipeline {
       environment {
           scannerHome = tool 'SonarQubeScanner'
       }
-      steps {
-          withSonarQubeEnv('sonarqube') {
-              sh "${scannerHome}/bin/sonar-scanner"
-          }
+      withSonarQubeEnv('sonarqube') {
+          sh """
+          export JAVA_TOOL_OPTIONS='--add-opens=java.base/java.lang=ALL-UNNAMED'
+          ${scannerHome}/bin/sonar-scanner
+          """
       }
     }
 
