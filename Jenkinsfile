@@ -66,8 +66,8 @@ pipeline {
           export JAVA_TOOL_OPTIONS='--add-opens=java.base/java.lang=ALL-UNNAMED'
           ${scannerHome}/bin/sonar-scanner
           """
-      }
-      }
+        }
+      } 
     }
 
     stage ('Package Artifact') {
