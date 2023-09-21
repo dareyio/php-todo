@@ -65,7 +65,7 @@ pipeline {
               sh "${scannerHome}/bin/sonar-scanner"
           }
       }
-}
+    }
 
     stage ('Package Artifact') {
       steps {
