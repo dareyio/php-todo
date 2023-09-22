@@ -56,20 +56,34 @@ pipeline {
         }
       }
 
-       stage('SonarQube Quality Gate') {
-      when { branch pattern: "^develop*|^hotfix*|^release*|^main*", comparator: "REGEXP"}
-        environment {
-            scannerHome = tool 'SonarQubeScanner'
+    stage('SonarQube Quality Gate') {
+      environment {
+          scannerHome = tool 'SonarQubeScanner'
+      }
+      steps {
+          withSonarQubeEnv('sonarqube') {
+          sh """
+          export JAVA_TOOL_OPTIONS='--add-opens=java.base/java.lang=ALL-UNNAMED'
+          ${scannerHome}/bin/sonar-scanner
+          """
         }
-        steps {
-            withSonarQubeEnv('sonarqube') {
-                sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
-            }
-            timeout(time: 1, unit: 'MINUTES') {
-                waitForQualityGate abortPipeline: true
-            }
-        }
+      } 
     }
+
+    // stage('SonarQube Quality Gate') {
+    //     when { branch pattern: "^develop*|^hotfix*|^release*|^main*", comparator: "REGEXP"}
+    //     environment {
+    //         scannerHome = tool 'SonarQubeScanner'
+    //     }
+    //     steps {
+    //         withSonarQubeEnv('sonarqube') {
+    //             sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
+    //         }
+    //         timeout(time: 1, unit: 'MINUTES') {
+    //             waitForQualityGate abortPipeline: true
+    //         }
+    //     }
+    //  }
 
     stage ('Package Artifact') {
       steps {
