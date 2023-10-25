@@ -15,7 +15,7 @@ pipeline {
 <<<<<<< HEAD
             git branch: 'main', url: 'https://github.com/Mubarokahh/php-todo.git'
 =======
-        git(branch: 'main', url: 'mubarokahh/php-todo.git')
+        git(branch: 'main', url: 'https://github.com/mubarokahh/php-todo.git')
 >>>>>>> 72d5f0c5d85b885af870feee1fe8dc7f38a489bb
       }
     }
