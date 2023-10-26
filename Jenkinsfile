@@ -1,3 +1,4 @@
+
 pipeline {
   agent any
   stages {
@@ -26,5 +27,10 @@ pipeline {
       }
     }
 
+   stage('Execute Unit Tests') {
+     steps {
+       sh './vendor/bin/phpunit'
+      }
+   }
   }
 }
