@@ -35,7 +35,7 @@ pipeline {
     
   stage('Code Analysis') {
     steps {
-      dir ($PATH:/home/ec2-user/.config/composer/vendor/bin)
+      dir("/home/ec2-user/.config/composer/vendor/bin")
         sh 'phploc app/ --log-csv build/logs/phploc.csv'
   }
 }
