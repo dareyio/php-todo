@@ -1,6 +1,9 @@
 
 pipeline {
   agent any
+  environment {
+    PATH = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/home/ec2-user/.config/composer/vendor/bin"
+  }
   stages {
     stage('Initial cleanup') {
       steps {
@@ -34,10 +37,7 @@ pipeline {
    }
     
   stage('Code Analysis') {
-    environment {
-       PATH = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/home/ec2-user/.config/composer/vendor/bin"
     steps {
-      
         sh 'phploc app/ --log-csv build/logs/phploc.csv'
   }
 }
