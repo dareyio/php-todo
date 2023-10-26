@@ -35,6 +35,8 @@ pipeline {
     
   stage('Code Analysis') {
     steps {
+        sh 'echo $PATH'
+        sh 'which phploc'
         sh 'phploc app/ --log-csv build/logs/phploc.csv'
   }
 }
