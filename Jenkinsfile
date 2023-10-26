@@ -9,7 +9,7 @@ pipeline {
 
       }
     }
-
+cd
     stage('Checkout SCM') {
       steps {
 <<<<<<< HEAD
