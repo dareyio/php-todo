@@ -34,8 +34,10 @@ pipeline {
    }
     
   stage('Code Analysis') {
+    environment {
+       PATH = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/home/ec2-user/.config/composer/vendor/bin"
     steps {
-      dir("/home/ec2-user/.config/composer/vendor/bin")
+      
         sh 'phploc app/ --log-csv build/logs/phploc.csv'
   }
 }
