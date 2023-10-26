@@ -9,7 +9,7 @@ pipeline {
 
       }
     }
-cd
+
     stage('Checkout SCM') {
       steps {
             git branch: 'main', url: 'https://github.com/Mubarokahh/php-todo.git'
