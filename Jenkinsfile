@@ -88,4 +88,6 @@ pipeline {
     build job: 'ansible-project/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
     }
   }
-
+}
+} 
+}
