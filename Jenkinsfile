@@ -79,6 +79,7 @@ pipeline {
             }
           }
      }
+          stage {
                  server.upload spec: uploadSpec
                }
             }
