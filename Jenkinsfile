@@ -4,9 +4,9 @@ pipeline {
   stages {
 
     stage("Initial cleanup") {
-          steps {
-            dir("${WORKSPACE}") {
-              deleteDir()
+      steps {
+        dir("${WORKSPACE}") {
+          deleteDir()
             }
           }
         }
@@ -37,13 +37,13 @@ pipeline {
       }
     }
     //code analysis for php app
-  stage('Code Analysis') {
-	  steps {
+    stage('Code Analysis') {
+	    steps {
 	        sh 'phploc app/ --log-csv build/logs/phploc.csv'	
 	  }
    }
         // Add plot data for Code Coverage Report of Code Analysi
-       stage('Plot Code Coverage Report') {
+    stage('Plot Code Coverage Report') {
       steps {
         
             plot csvFileName: 'plot-396c4a6b-b573-41e5-85d8-73613b2ffffb.csv', csvSeries: [[displayTableFlag: false, exclusionValues: 'Lines of Code (LOC),Comment Lines of Code (CLOC),Non-Comment Lines of Code (NCLOC),Logical Lines of Code (LLOC)                          ', file: 'build/logs/phploc.csv', inclusionFlag: 'INCLUDE_BY_STRING', url: '']], group: 'phploc', numBuilds: '100', style: 'line', title: 'A - Lines of code', yaxis: 'Lines of Code'
@@ -59,6 +59,32 @@ pipeline {
             plot csvFileName: 'plot-396c4a6b-b573-41e5-85d8-73613b2ffffb.csv', csvSeries: [[displayTableFlag: false, exclusionValues: 'Interfaces,Traits,Classes,Methods,Functions,Constants', file: 'build/logs/phploc.csv', inclusionFlag: 'INCLUDE_BY_STRING', url: '']], group: 'phploc', numBuilds: '100', style: 'line', title: 'BB - Structure Objects', yaxis: 'Count'
 
       }
+    }
+    stage ('Package Artifact') {
+      steps {
+        sh 'zip -qr php-todo.zip ${WORKSPACE}/*'
+      }
+
+    }
+    stage ('Upload Artifact to Artifactory') {
+      steps {
+        script { 
+             def server = Artifactory.server 'artifactory-server'                 
+             def uploadSpec = """{
+                "files": [
+                  {
+                   "pattern": "php-todo.zip",
+                   "target": "php-todo/php-todo",
+                   "props": "type=zip;status=ready"
+
+                   }
+                ]
+             }""" 
+
+             server.upload spec: uploadSpec
+           }
+        }
+
     }
   }
 }
