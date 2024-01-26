@@ -85,5 +85,10 @@ pipeline {
            }
         }
     }
+    stage ('Deploy to Dev Environment') {
+      steps {
+        build job: 'CONTINUOUS-INTEGRATION-CI-WITH-JENKINS-ANSIBLE-ARTIFACTORY-SONARQUBE-PHP/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
+        }
+      }
   }
 }
