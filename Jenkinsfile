@@ -32,7 +32,7 @@ pipeline {
         // Set xdebug.mode to coverage
             sh 'echo "xdebug.mode=coverage" >> /etc/php.ini'
 
-        // Run PHPUnit
+        // Run PHPUnit for unit test
             sh './vendor/bin/phpunit'
       }
     }
