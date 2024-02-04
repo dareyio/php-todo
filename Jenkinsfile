@@ -27,12 +27,14 @@ pipeline {
       }
     }
 
+// Unit Test
     stage('Execute Unit Tests') {
       steps {
              sh './vendor/bin/phpunit'
       } 
     }
 
+// Code Analysis
     stage('Code Analysis') {
       steps {
          sh 'phploc app/ --log-csv build/logs/phploc.csv'	
@@ -83,6 +85,7 @@ pipeline {
         }
     }
 
+  //  Deploy to Dev environment
     stage ('Deploy to Dev Environment') {
       steps {
         build job: 'CONTINUOUS-INTEGRATION-CI-WITH-JENKINS-ANSIBLE-ARTIFACTORY-SONARQUBE-PHP/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
