@@ -3,7 +3,7 @@ pipeline {
 
   stages {
 
-     stage("Initial cleanup") {
+    stage("Initial cleanup") {
           steps {
             dir("${WORKSPACE}") {
               deleteDir()
@@ -57,7 +57,7 @@ pipeline {
       }
     }
 
-   stage ('Package Artifact') {
+    stage ('Package Artifact') {
       steps {
         sh 'zip -qr php-todo.zip ${WORKSPACE}/*'
       }
@@ -82,5 +82,11 @@ pipeline {
            }
         }
     }
+
+    stage ('Deploy to Dev Environment') {
+      steps {
+        build job: 'CONTINUOUS-INTEGRATION-CI-WITH-JENKINS-ANSIBLE-ARTIFACTORY-SONARQUBE-PHP/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
+        }
+      }
   }
 }
